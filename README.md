@@ -1,3 +1,7 @@
 # Hotel_Reservation_System
 
-This program will create a hotel reservation system using Java.  Different attributes of a room will be remembered (smoking/non-smoking, what floor, how many beds, etc) and considered when a customer is selecting a room.  Also the system will remember past customers and recommend rooms that are similar to the last room they rented.
+This program will create a hotel reservation system using Java.  Different attributes of a room will be remembered (smoking/non-smoking, what floor, how many beds, cost, etc) and considered when a customer is selecting a room.  Also the system will remember past customers and recommend rooms that are similar to the last room they rented.
+
+Employees of the hotel will have to access the reservation system by logging in using a username and password.  An adminnistrator is able to add new employees and other administrators.  There will also be a master account for the manager/boss of the hotel that will have full access to the system, and administrators nor employees will be able to alter the account.  A new employee will need to be added to the system by an administrator or manager by logging into the system with their own credentials and adding the employee.  Each account will be able to change their password, but the user name will remain the same.
+
+Whenever a reservation is added, edited, or removed, a log will be created to show which employee is making the change.  Employees will also be able to search for current reserved rooms by the customer's name or room number.

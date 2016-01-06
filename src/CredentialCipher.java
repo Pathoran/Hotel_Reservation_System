@@ -1,7 +1,12 @@
-import java.io.*;
+import java.io.File;
+import java.io.FileNotFoundException;
+import java.io.IOException;
+import java.io.UnsupportedEncodingException;
+import java.security.NoSuchAlgorithmException;
 import java.util.Scanner;
 
 import java.security.GeneralSecurityException;
+import java.security.SecureRandom;
 
 import javax.crypto.Cipher;
 import javax.crypto.SecretKey;
@@ -24,17 +29,13 @@ public class CredentialCipher {
         System.out.println("Original password: " + pwd);
         String encryptedPassword = encrypt(pwd);
         System.out.println("Encrypted password: " + encryptedPassword);
-        String decryptedPassword = decrypt(encryptedPassword);
-        System.out.println("Decrypted password: " + decryptedPassword);
     }
 
     private static String getPassword() throws FileNotFoundException {
 
         File file = new File("MASTERKEY.txt");
         Scanner scan = new Scanner(file);
-        String password = scan.nextLine();
-
-        return password;
+        return scan.nextLine();
     }
 
     private static String base64Encode(byte[] bytes) {
@@ -48,9 +49,9 @@ public class CredentialCipher {
     }
     private static String encrypt(String property) throws GeneralSecurityException, UnsupportedEncodingException, FileNotFoundException {
         char[] PASSWORD = getPassword().toCharArray();
-        SecretKeyFactory keyFactory = SecretKeyFactory.getInstance("PBEWithMD5AndDES");
+        SecretKeyFactory keyFactory = SecretKeyFactory.getInstance("PBEWithSHA1AndDESede");
         SecretKey key = keyFactory.generateSecret(new PBEKeySpec(PASSWORD));
-        Cipher pbeCipher = Cipher.getInstance("PBEWithMD5AndDES");
+        Cipher pbeCipher = Cipher.getInstance("PBEWithSHA1AndDESede");
         pbeCipher.init(Cipher.ENCRYPT_MODE, key, new PBEParameterSpec(SALTSEQUENCE, 20));
         return base64Encode(pbeCipher.doFinal(property.getBytes("UTF-8")));
     }

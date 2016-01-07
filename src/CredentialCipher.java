@@ -9,7 +9,6 @@ import java.util.Arrays;
 
 import java.security.GeneralSecurityException;
 import java.security.SecureRandom;
-import java.security.spec.InvalidKeySpecException;
 
 import javax.crypto.SecretKeyFactory;
 import javax.crypto.spec.PBEKeySpec;
@@ -25,26 +24,21 @@ public class CredentialCipher {
 
     public static void main(String[] args) throws Exception {
         Scanner scan = new Scanner(System.in);
-        String pwd = "secret0";
+
         byte[] salt = generateSalt();
-        System.out.println("Original password: " + pwd);
-        char[] pwdChar = pwd.toCharArray();
-        byte[] orig = generateHash(pwdChar, salt);
-        String encrypted = Arrays.toString(orig);
-        System.out.println("Encrypted password: " + encrypted);
-        System.out.println("Enter password: ");
-        String blah = scan.nextLine();
-        char[] sChar = blah.toCharArray();
-        byte[] newh = generateHash(blah.toCharArray(), salt);
-        sChar = blah.toCharArray();
-        String check = Arrays.toString(newh);
-        System.out.println("Attempted password: " + check);
-        if (hashCheck(blah.toCharArray(), salt, orig)) {
-            System.out.println("It's a match!");
+        System.out.println("Please enter your username: ");
+        String username = scan.nextLine();
+        System.out.println("Please enter your password: ");
+        String password = scan.nextLine();
+        while (password.length() < 6 || !(password.matches(".*\\d+.*"))) { //password.matches(".*\\d+.*") checks for a numeric value in the password
+            System.out.println("Invalid password.  Please enter password: ");
+            password = scan.nextLine();
         }
-        else {
-            System.out.println("It's not a match.");
-        }
+        byte[] encrypted = generateHash(password.toCharArray(), salt);
+
+
+
+        System.out.println("Thank you.  Your username and password has been saved.");
     }
 
     public static byte[] generateSalt() {
@@ -56,7 +50,7 @@ public class CredentialCipher {
     public static byte[] generateHash(char[] password, byte[] salt) throws GeneralSecurityException {
         PBEKeySpec key = new PBEKeySpec(password, salt, ITERATIONCOUNT, KEYLENGTH);
         Arrays.fill(password, Character.MIN_VALUE);
-        SecretKeyFactory secret = SecretKeyFactory.getInstance("PBKDF2WithHmacSHA256");
+        SecretKeyFactory secret = SecretKeyFactory.getInstance("PBKDF2WithHmacSHA1");  //PBKDF2WithHmacSHA256
         return secret.generateSecret(key).getEncoded();
     }
 
@@ -74,16 +68,7 @@ public class CredentialCipher {
         return true;
     }
 
-    public static byte[] hash(char[] password, byte[] salt) {
-        PBEKeySpec spec = new PBEKeySpec(password, salt, ITERATIONCOUNT, KEYLENGTH);
-        Arrays.fill(password, Character.MIN_VALUE);
-        try {
-            SecretKeyFactory skf = SecretKeyFactory.getInstance("PBKDF2WithHmacSHA1");
-            return skf.generateSecret(spec).getEncoded();
-        } catch (NoSuchAlgorithmException | InvalidKeySpecException e) {
-            throw new AssertionError("Error while hashing a password: " + e.getMessage(), e);
-        } finally {
-            spec.clearPassword();
-        }
+    public static boolean addNewUser(String username, String password) {
+        return true;
     }
 }

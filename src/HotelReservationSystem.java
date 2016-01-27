@@ -6,7 +6,10 @@ import java.awt.*; //edit this later to take out wildcard
 import java.awt.event.*;
 
 /**
- * Created by WilliamBeckler on 1/5/2016.
+ * Purpose: Create a hotel reservation system where users can log in and reserve a hotel room.
+ *
+ * @author William Beckler
+ * @version 1.0 1/26/2016
  */
 public class HotelReservationSystem extends JFrame {
 

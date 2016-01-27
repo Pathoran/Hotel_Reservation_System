@@ -14,7 +14,10 @@ import javax.crypto.SecretKeyFactory;
 import javax.crypto.spec.PBEKeySpec;
 
 /**
- * Created by William Beckler on 1/5/2016.
+ * Purpose: Generate a salted and hashed password, and save it to a file/database.
+ *
+ * @author William Beckler
+ * @version 1.0 1/26/2016
  */
 public class CredentialCipher {
 
@@ -41,12 +44,26 @@ public class CredentialCipher {
         System.out.println("Thank you.  Your username and password has been saved.");
     }
 
+    /**
+     * Generate a random salt sequence
+     *
+     * @param args Not used
+     * @return A byte array with the randomly generated salt
+     */
     public static byte[] generateSalt() {
         byte[] salt = new byte[32];
         RANDOM.nextBytes(salt);
         return salt;
     }
 
+    /**
+     * Generate hash of the salt and password
+     *
+     * @param password the password provided by the user
+     * @param salt the randomly generated salt crated by the generateSalt method
+     * @return A byte array with the generated hash of the salt and password
+     * @throws GeneralSecurityException
+     */
     public static byte[] generateHash(char[] password, byte[] salt) throws GeneralSecurityException {
         PBEKeySpec key = new PBEKeySpec(password, salt, ITERATIONCOUNT, KEYLENGTH);
         Arrays.fill(password, Character.MIN_VALUE);
@@ -54,6 +71,16 @@ public class CredentialCipher {
         return secret.generateSecret(key).getEncoded();
     }
 
+    /**
+     * A check to verify if a password matches by running it with the previous salt and hash.
+     *
+     * @param password the attempted password entry by the user.
+     * @param salt the salt used by the original password.
+     * @param hashedPassword the hashed version of the original password that will be used to check
+     *                       if the attempted password is correct.
+     * @return A boolean, true if the passwords match and false if not.
+     * @throws GeneralSecurityException
+     */
     public static boolean hashCheck(char[] password, byte[] salt, byte[] hashedPassword) throws GeneralSecurityException {
         byte[] hashAttempt = generateHash(password, salt);
         Arrays.fill(password, Character.MIN_VALUE);
@@ -68,6 +95,13 @@ public class CredentialCipher {
         return true;
     }
 
+    /**
+     * Add a user to the file/database for storage.
+     *
+     * @param username the name the user will use to log in.
+     * @param password the password the user wants to use with their account
+     * @return A boolean, true if the account was added and false if not.
+     */
     public static boolean addNewUser(String username, String password) {
         return true;
     }
